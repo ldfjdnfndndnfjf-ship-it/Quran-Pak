@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AL-QURAN DIGITAL | Nawab ZADA</title>
+    <title>AL-QURAN DIGITAL | By Nawab ZADA</title>
     <style>
         :root { --gold: #D4AF37; --dark-bg: #0a0a0a; --card-bg: #1a1a1a; --white: #ffffff; }
-        body { background: var(--dark-bg); color: var(--white); font-family: 'Arial', sans-serif; margin: 0; padding-bottom: 100px; }
+        body { background: var(--dark-bg); color: var(--white); font-family: 'Arial', sans-serif; margin: 0; padding-bottom: 160px; }
         
         /* Header */
         .header { background: #064420; color: var(--gold); padding: 20px; text-align: center; border-bottom: 3px solid var(--gold); }
         .header h1 { margin: 0; font-size: 1.8rem; }
         
         /* Search Bar */
-        .search-box { padding: 15px; background: var(--dark-bg); position: sticky; top: 0; z-index: 10; }
+        .search-box { padding: 15px; background: var(--dark-bg); position: sticky; top: 0; z-index: 10; text-align: center; }
         #searchInput { width: 90%; padding: 12px; border-radius: 8px; border: 1px solid var(--gold); background: #222; color: white; outline: none; }
 
         .container { padding: 15px; }
@@ -28,15 +28,15 @@
         .surah-info h3 { margin: 0; color: var(--gold); }
         .surah-info p { margin: 5px 0; font-size: 0.8rem; color: #bbb; }
 
-        .btn-group { display: flex; gap: 8px; }
+        .btn-group { display: flex; gap: 8px; direction: ltr; }
         .btn { padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px; }
         .btn-listen { background: var(--gold); color: black; }
         .btn-read { background: white; color: black; }
 
         /* Sticky Player */
         .audio-player { 
-            position: fixed; bottom: 0; width: 100%; background: #111; border-top: 2px solid var(--gold); 
-            padding: 10px; display: none; text-align: center; 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #111; border-top: 2px solid var(--gold); 
+            padding: 10px; display: none; text-align: center; z-index: 99;
         }
         .player-info { font-size: 0.9rem; color: var(--gold); margin-bottom: 5px; }
         audio { width: 95%; height: 35px; }
@@ -46,15 +46,20 @@
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: var(--dark-bg); z-index: 100; overflow-y: auto; padding: 20px; box-sizing: border-box;
         }
-        .close-read { position: sticky; top: 0; background: var(--gold); color: black; padding: 10px; border: none; width: 100%; font-weight: bold; margin-bottom: 20px; }
-        .quran-text { font-size: 1.8rem; line-height: 2.5; text-align: center; }
+        .close-read { position: sticky; top: 0; background: var(--gold); color: black; padding: 10px; border: none; width: 100%; font-weight: bold; margin-bottom: 20px; cursor: pointer; }
+        .quran-text { font-size: 1.8rem; line-height: 2.5; text-align: center; direction: rtl; }
+
+        /* WhatsApp Button VIP Footer */
+        .wa-channel-container { text-align: center; margin: 30px auto 10px auto; padding: 10px; }
+        .wa-btn { display: inline-block; padding: 12px 25px; border: 1px solid #25d366; color: #25d366; text-decoration: none; border-radius: 50px; font-size: 0.8rem; font-weight: bold; letter-spacing: 1px; transition: 0.3s; }
+        .wa-btn:hover { background: #25d366; color: #000; box-shadow: 0 0 20px rgba(37, 211, 102, 0.4); }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>AL-QURAN DIGITAL</h1>
-        <p>Project by Nawab ZADA</p>
+        <p>Project by Nawab ZADA Hacker</p>
     </div>
 
     <div class="search-box">
@@ -63,6 +68,12 @@
 
     <div class="container" id="surahList">
         <p style="text-align: center;">لوڈ ہو رہا ہے (Loading)...</p>
+    </div>
+
+    <div class="wa-channel-container">
+        <a href="https://whatsapp.com/channel/0029VbB47ttDDmFNztpnZf2m" target="_blank" class="wa-btn">
+            JOIN WHATSAPP CHANNEL
+        </a>
     </div>
 
     <div class="audio-player" id="playerCont">
@@ -79,10 +90,14 @@
         let allSurahs = [];
 
         async function init() {
-            const res = await fetch('https://api.alquran.cloud/v1/surah');
-            const data = await res.json();
-            allSurahs = data.data;
-            displaySurahs(allSurahs);
+            try {
+                const res = await fetch('https://api.alquran.cloud/v1/surah');
+                const data = await res.json();
+                allSurahs = data.data;
+                displaySurahs(allSurahs);
+            } catch (error) {
+                document.getElementById('surahList').innerHTML = `<p style="text-align: center; color: red;">Error loading data. Please check connection.</p>`;
+            }
         }
 
         function displaySurahs(list) {
@@ -105,7 +120,7 @@
         }
 
         function filterSurahs() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const filtered = allSurahs.filter(s => 
                 s.name.includes(query) || s.englishName.toLowerCase().includes(query)
             );
@@ -130,10 +145,14 @@
             area.style.display = 'block';
             textCont.innerText = "لوڈ ہو رہا ہے...";
             
-            const res = await fetch(`https://api.alquran.cloud/v1/surah/${num}`);
-            const data = await res.json();
-            const text = data.data.ayahs.map(a => a.text).join(' ۝ ');
-            textCont.innerText = text;
+            try {
+                const res = await fetch(`https://api.alquran.cloud/v1/surah/${num}`);
+                const data = await res.json();
+                const text = data.data.ayahs.map(a => a.text).join(' ۝ ');
+                textCont.innerText = text;
+            } catch (error) {
+                textCont.innerText = "Error loading text. Please try again.";
+            }
         }
 
         function closeRead() {

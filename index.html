@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AL-QURAN DIGITAL | By Nawab ZADA</title>
+    <title>AL-QURAN DIGITAL | ByNawab ZADA</title>
     <style>
         :root { --gold: #D4AF37; --dark-bg: #0a0a0a; --card-bg: #1a1a1a; --white: #ffffff; }
         body { background: var(--dark-bg); color: var(--white); font-family: 'Arial', sans-serif; margin: 0; padding-bottom: 160px; }
@@ -59,7 +59,7 @@
 
     <div class="header">
         <h1>AL-QURAN DIGITAL</h1>
-        <p>Project by Nawab ZADA Hacker</p>
+        <p>Project by Nawab ZADA</p>
     </div>
 
     <div class="search-box">
@@ -132,11 +132,13 @@
             const cont = document.getElementById('playerCont');
             const info = document.getElementById('nowPlaying');
             
-            const url = `https://download.quranicaudio.com/quran/mishari_rashid_al-afasy/${String(num).padStart(3, '0')}.mp3`;
+            // Fixed direct high-speed secure audio streaming path
+            const url = `https://cdn.aladhan.com/audio/surahs/128/ar.alafasy/${num}.mp3`;
             player.src = url;
             info.innerText = "Now Reciting: " + name;
             cont.style.display = 'block';
-            player.play();
+            player.load();
+            player.play().catch(e => console.log("Playback interaction trigger required."));
         }
 
         async function readSurah(num) {
